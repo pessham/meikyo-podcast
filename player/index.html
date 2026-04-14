@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>明鏡ポッドキャスト</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f7f4;
+      --surface: #ffffff;
+      --border: #e8e5e0;
+      --text: #1a1a1a;
+      --sub: #888;
+      --accent: #2d6a4f;
+      --accent-light: #e8f4ef;
+      --player-bg: #1a1a1a;
+      --player-text: #ffffff;
+      --radius: 10px;
+    }
+    body {
+      font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── ログイン画面 ── */
+    #auth-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    #auth-screen h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    #auth-screen p  { font-size: 14px; color: var(--sub); margin-bottom: 32px; line-height: 1.6; }
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #5865F2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .discord-btn:hover { background: #4752C4; }
+    .discord-btn svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+    #auth-error {
+      margin-top: 20px;
+      color: #c0392b;
+      font-size: 13px;
+      display: none;
+    }
+    #auth-loading {
+      margin-top: 20px;
+      color: var(--sub);
+      font-size: 13px;
+      display: none;
+    }
+
+    /* ── プレイヤー画面 ── */
+    #app-screen { display: none; padding-bottom: 120px; }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 17px; font-weight: 700; }
+    #user-info { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--sub); }
+    #user-avatar { width: 24px; height: 24px; border-radius: 50%; }
+    #logout-btn { font-size: 11px; color: var(--sub); cursor: pointer; text-decoration: underline; border: none; background: none; }
+    header p { font-size: 12px; color: var(--sub); margin-top: 4px; }
+    #progress-bar { margin-top: 10px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    #progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
+    #episode-list { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 8px; }
+
+    .episode-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .episode-item:hover { background: var(--accent-light); }
+    .episode-item.active { background: var(--accent-light); border-color: var(--accent); }
+    .episode-item.unavailable { opacity: 0.4; cursor: default; }
+    .ep-num { font-size: 11px; color: var(--sub); min-width: 36px; text-align: center; }
+    .episode-item.active .ep-num { color: var(--accent); font-weight: 600; }
+    .ep-info { flex: 1; min-width: 0; }
+    .ep-title { font-size: 14px; font-weight: 500; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .episode-item.active .ep-title { color: var(--accent); }
+    .ep-icon { font-size: 16px; color: var(--accent); opacity: 0; transition: opacity 0.15s; }
+    .episode-item.active .ep-icon { opacity: 1; }
+    .ep-badge { font-size: 10px; padding: 2px 6px; background: var(--border); color: var(--sub); border-radius: 4px; }
+
+    /* メルマガフッター */
+    #newsletter-footer {
+      margin: 32px 16px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    #newsletter-footer p { font-size: 13px; color: var(--sub); line-height: 1.6; margin-bottom: 12px; }
+    #newsletter-footer a {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    #newsletter-footer a:hover { background: #245a42; }
+
+    /* プレイヤーバー */
+    #player-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--player-bg);
+      color: var(--player-text);
+      padding: 10px 20px 18px;
+      z-index: 100;
+    }
+    #player-seek { width: 100%; height: 3px; margin-bottom: 10px; accent-color: var(--accent); cursor: pointer; }
+    #player-main { display: flex; align-items: center; gap: 10px; }
+    #now-playing-title { flex: 1; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #now-playing-time { font-size: 11px; color: #aaa; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .ctrl-btn { background: none; border: none; color: white; cursor: pointer; font-size: 20px; padding: 4px; opacity: 0.9; }
+    .ctrl-btn:hover { opacity: 1; }
+    #play-btn { font-size: 26px; }
+    #speed-controls { display: flex; gap: 3px; }
+    .speed-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #ccc;
+      border-radius: 5px;
+      padding: 3px 6px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .speed-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ログイン画面 -->
+<div id="auth-screen">
+  <h1>明鏡ポッドキャスト</h1>
+  <p>明鏡の購入者限定コンテンツです。<br>Discordアカウントでログインしてください。</p>
+  <a class="discord-btn" id="login-btn" href="#">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.003.022.015.043.033.055a19.952 19.952 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+    </svg>
+    Discordでログイン
+  </a>
+  <div id="auth-loading">認証中…</div>
+  <div id="auth-error">このDiscordアカウントは明鏡サーバーのメンバーではありません。</div>
+</div>
+
+<!-- プレイヤー画面 -->
+<div id="app-screen">
+  <header>
+    <div class="header-top">
+      <h1>明鏡ポッドキャスト</h1>
+      <div id="user-info">
+        <img id="user-avatar" src="" alt="">
+        <span id="user-name"></span>
+        <button id="logout-btn" onclick="logout()">ログアウト</button>
+      </div>
+    </div>
+    <p id="header-sub">読み込み中…</p>
+    <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+  </header>
+
+  <div id="episode-list"></div>
+
+  <div id="newsletter-footer">
+    <p>「自分の強みを活かして、好きなことで稼ぐ」を目指したい方はこちら。<br>PDFをテキストファイルに簡単に変換できるサイトなど、特典もつけてます。</p>
+    <a href="https://metamake0601.systeme.io/aa3f000b" target="_blank" rel="noopener">ペスハムのメルマガを読む →</a>
+  </div>
+
+  <div id="player-bar">
+    <input type="range" id="player-seek" min="0" max="100" value="0" step="0.1">
+    <div id="player-main">
+      <div id="speed-controls">
+        <button class="speed-btn active" data-speed="1">1x</button>
+        <button class="speed-btn" data-speed="1.5">1.5x</button>
+        <button class="speed-btn" data-speed="2">2x</button>
+        <button class="speed-btn" data-speed="3">3x</button>
+      </div>
+      <button class="ctrl-btn" id="prev-btn">⏮</button>
+      <button class="ctrl-btn" id="play-btn">▶</button>
+      <button class="ctrl-btn" id="next-btn">⏭</button>
+      <div style="flex:1;min-width:0">
+        <div id="now-playing-title">再生停止中</div>
+      </div>
+      <div id="now-playing-time">--:-- / --:--</div>
+    </div>
+  </div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+// ── 設定 ──────────────────────────────────────────────
+const DISCORD_CLIENT_ID  = 'DISCORD_CLIENT_ID_HERE';
+const REQUIRED_GUILD_ID  = '1352073351882870814';
+const REDIRECT_URI       = 'https://pessham.github.io/meikyo-podcast/player/';
+const MANIFEST_URL       = './manifest.json';
+// ─────────────────────────────────────────────────────
+
+const audio    = document.getElementById('audio');
+const playBtn  = document.getElementById('play-btn');
+const seekBar  = document.getElementById('player-seek');
+const titleEl  = document.getElementById('now-playing-title');
+const timeEl   = document.getElementById('now-playing-time');
+const listEl   = document.getElementById('episode-list');
+
+let episodes = [], currentIndex = -1, isDragging = false;
+
+// ── Discord OAuth（Implicit Flow）─────────────────────
+
+function buildOAuthURL() {
+  const params = new URLSearchParams({
+    client_id: DISCORD_CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    response_type: 'token',
+    scope: 'identify guilds',
+  });
+  return `https://discord.com/oauth2/authorize?${params}`;
+}
+document.getElementById('login-btn').href = buildOAuthURL();
+
+async function checkAuth() {
+  // コールバックのトークンを処理
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  const token = hash.get('access_token');
+
+  if (token) {
+    // URLからhashを除去
+    history.replaceState(null, '', window.location.pathname);
+    sessionStorage.setItem('discord_token', token);
+    await verifyAndShow(token);
+    return;
+  }
+
+  // セッションに保存済みトークンがあれば再検証
+  const saved = sessionStorage.getItem('discord_token');
+  if (saved) {
+    await verifyAndShow(saved);
+    return;
+  }
+
+  // 未ログイン
+  showAuthScreen();
+}
+
+async function verifyAndShow(token) {
+  showLoading(true);
+  try {
+    // ユーザー情報取得
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!userRes.ok) throw new Error('token_expired');
+    const user = await userRes.json();
+
+    // ギルドメンバーシップ確認
+    const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const guilds = await guildsRes.json();
+    const isMember = guilds.some(g => g.id === REQUIRED_GUILD_ID);
+
+    if (!isMember) {
+      sessionStorage.removeItem('discord_token');
+      showError();
+      return;
+    }
+
+    // 認証OK → プレイヤー表示
+    const avatarUrl = user.avatar
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64`
+      : `https://cdn.discordapp.com/embed/avatars/0.png`;
+    document.getElementById('user-avatar').src = avatarUrl;
+    document.getElementById('user-name').textContent = user.global_name || user.username;
+    showApp();
+    loadEpisodes();
+  } catch (e) {
+    sessionStorage.removeItem('discord_token');
+    showAuthScreen();
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('discord_token');
+  location.reload();
+}
+
+function showLoading(v) {
+  document.getElementById('auth-loading').style.display = v ? 'block' : 'none';
+}
+function showError() {
+  showLoading(false);
+  document.getElementById('auth-error').style.display = 'block';
+  document.getElementById('login-btn').style.display = 'inline-flex';
+}
+function showAuthScreen() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  showLoading(false);
+}
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+}
+
+// ── エピソード読み込み ────────────────────────────────
+
+function loadEpisodes() {
+  fetch(MANIFEST_URL)
+    .then(r => r.json())
+    .then(data => {
+      episodes = data;
+      renderList();
+      updateHeader();
+      setupMediaSession();
+    })
+    .catch(() => {
+      listEl.innerHTML = '<p style="padding:20px;color:#888">エピソードを読み込めませんでした。</p>';
+    });
+}
+
+function renderList() {
+  listEl.innerHTML = '';
+  episodes.forEach((ep, i) => {
+    const el = document.createElement('div');
+    el.className = 'episode-item' + (ep.available ? '' : ' unavailable');
+    el.innerHTML = `
+      <div class="ep-num">#${ep.id}</div>
+      <div class="ep-info"><div class="ep-title">${ep.title}</div></div>
+      ${ep.available ? '<div class="ep-icon">▶</div>' : '<span class="ep-badge">準備中</span>'}
+    `;
+    if (ep.available) el.addEventListener('click', () => playEpisode(i));
+    listEl.appendChild(el);
+  });
+}
+
+function updateHeader() {
+  const av = episodes.filter(e => e.available).length;
+  document.getElementById('header-sub').textContent = `全${episodes.length}話 · ${av}話配信中`;
+  document.getElementById('progress-fill').style.width = (episodes.length ? av / episodes.length * 100 : 0) + '%';
+}
+
+// ── プレイヤー ────────────────────────────────────────
+
+function playEpisode(i) {
+  if (i < 0 || i >= episodes.length || !episodes[i].available) return;
+  currentIndex = i;
+  audio.src = episodes[i].file;
+  audio.load();
+  audio.play();
+  document.querySelectorAll('.episode-item').forEach((el, j) => el.classList.toggle('active', j === i));
+  document.querySelectorAll('.episode-item')[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  titleEl.textContent = episodes[i].title;
+  updateMediaSession(episodes[i]);
+}
+
+playBtn.addEventListener('click', () => {
+  if (currentIndex === -1) {
+    const first = episodes.findIndex(e => e.available);
+    if (first !== -1) playEpisode(first);
+    return;
+  }
+  audio.paused ? audio.play() : audio.pause();
+});
+
+audio.addEventListener('play', () => playBtn.textContent = '⏸');
+audio.addEventListener('pause', () => playBtn.textContent = '▶');
+audio.addEventListener('ended', () => {
+  let i = currentIndex + 1;
+  while (i < episodes.length && !episodes[i].available) i++;
+  if (i < episodes.length) playEpisode(i);
+  else playBtn.textContent = '▶';
+});
+
+document.getElementById('prev-btn').addEventListener('click', () => {
+  let i = currentIndex - 1;
+  while (i >= 0 && !episodes[i].available) i--;
+  if (i >= 0) playEpisode(i);
+});
+document.getElementById('next-btn').addEventListener('click', () => {
+  let i = currentIndex + 1;
+  while (i < episodes.length && !episodes[i].available) i++;
+  if (i < episodes.length) playEpisode(i);
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (!isDragging && audio.duration)
+    seekBar.value = audio.currentTime / audio.duration * 100;
+  timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration || 0);
+});
+seekBar.addEventListener('mousedown', () => isDragging = true);
+seekBar.addEventListener('input', () => { if (audio.duration) audio.currentTime = seekBar.value / 100 * audio.duration; });
+seekBar.addEventListener('mouseup', () => isDragging = false);
+seekBar.addEventListener('touchend', () => isDragging = false);
+
+document.querySelectorAll('.speed-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    audio.playbackRate = parseFloat(btn.dataset.speed);
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+function fmt(s) {
+  if (!s || isNaN(s)) return '--:--';
+  return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+}
+
+function setupMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.setActionHandler('play', () => audio.play());
+  navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+  navigator.mediaSession.setActionHandler('previoustrack', () => document.getElementById('prev-btn').click());
+  navigator.mediaSession.setActionHandler('nexttrack', () => document.getElementById('next-btn').click());
+  navigator.mediaSession.setActionHandler('seekto', e => { if (e.seekTime) audio.currentTime = e.seekTime; });
+}
+function updateMediaSession(ep) {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: ep.title, artist: 'イケハヤ / 明鏡', album: '明鏡ポッドキャスト',
+  });
+}
+
+// ── 起動 ─────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>
