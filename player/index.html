@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>明鏡ずんだキャスト</title>
+  <!-- GoatCounter analytics -->
+  <script data-goatcounter="https://pessham.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -378,6 +381,12 @@ function updateHeader() {
 
 // ── プレイヤー ────────────────────────────────────────
 
+function gc(path, title) {
+  if (window.goatcounter && window.goatcounter.count) {
+    window.goatcounter.count({ path, title, event: true });
+  }
+}
+
 function playEpisode(i) {
   if (i < 0 || i >= episodes.length || !episodes[i].available) return;
   currentIndex = i;
@@ -386,6 +395,7 @@ function playEpisode(i) {
   audio.load();
   audio.playbackRate = rate;
   audio.play();
+  gc('play/' + episodes[i].id, episodes[i].title);
   document.querySelectorAll('.episode-item').forEach((el, j) => el.classList.toggle('active', j === i));
   document.querySelectorAll('.episode-item')[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   titleEl.textContent = episodes[i].title;
@@ -404,6 +414,7 @@ playBtn.addEventListener('click', () => {
 audio.addEventListener('play', () => playBtn.textContent = '⏸');
 audio.addEventListener('pause', () => playBtn.textContent = '▶');
 audio.addEventListener('ended', () => {
+  if (currentIndex >= 0) gc('complete/' + episodes[currentIndex].id, episodes[currentIndex].title);
   let i = currentIndex + 1;
   while (i < episodes.length && !episodes[i].available) i++;
   if (i < episodes.length) {
@@ -457,9 +468,11 @@ seekBar.addEventListener('touchend', () => isDragging = false);
 
 document.querySelectorAll('.speed-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    audio.playbackRate = parseFloat(btn.dataset.speed);
+    const speed = parseFloat(btn.dataset.speed);
+    audio.playbackRate = speed;
     document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    gc('speed/' + speed + 'x', speed + '倍速');
   });
 });
 
