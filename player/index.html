@@ -381,8 +381,10 @@ function updateHeader() {
 function playEpisode(i) {
   if (i < 0 || i >= episodes.length || !episodes[i].available) return;
   currentIndex = i;
+  const rate = audio.playbackRate || 1;
   audio.src = episodes[i].file;
   audio.load();
+  audio.playbackRate = rate;
   audio.play();
   document.querySelectorAll('.episode-item').forEach((el, j) => el.classList.toggle('active', j === i));
   document.querySelectorAll('.episode-item')[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
