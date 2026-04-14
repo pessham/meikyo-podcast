@@ -47,12 +47,12 @@ def main():
     for chap, data in chapters.items():
         if int(chap) in SKIP_CHAPTERS:
             continue
-        wav_path = AUDIO_DIR / f"ep{int(chap):03d}.wav"
+        mp3_path = PLAYER_DIR / "audio" / f"ep{int(chap):03d}.mp3"
         episodes.append({
             "id": int(chap),
-            "file": f"ep{int(chap):03d}.wav",
+            "file": f"audio/ep{int(chap):03d}.mp3",
             "title": f"第{chap}章：{data['title']}",
-            "available": wav_path.exists()
+            "available": mp3_path.exists()
         })
 
     PLAYER_DIR.mkdir(exist_ok=True)

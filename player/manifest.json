@@ -1,307 +1,307 @@
 [
   {
     "id": 8,
-    "file": "ep008.wav",
+    "file": "audio/ep008.mp3",
     "title": "第8章：マーケティングとは「変化を起こすこと」",
     "available": true
   },
   {
     "id": 9,
-    "file": "ep009.wav",
+    "file": "audio/ep009.mp3",
     "title": "第9章：（当時）日本一クラファンで資金を集めた男のストーリー",
-    "available": false
+    "available": true
   },
   {
     "id": 10,
-    "file": "ep010.wav",
+    "file": "audio/ep010.mp3",
     "title": "第10章：変化をデザインする",
-    "available": false
+    "available": true
   },
   {
     "id": 12,
-    "file": "ep012.wav",
+    "file": "audio/ep012.mp3",
     "title": "第12章：マーケティング1.0｜「作れば売れる」牧歌的な時代",
-    "available": false
+    "available": true
   },
   {
     "id": 13,
-    "file": "ep013.wav",
+    "file": "audio/ep013.mp3",
     "title": "第13章：「利益の共有」",
-    "available": false
+    "available": true
   },
   {
     "id": 14,
-    "file": "ep014.wav",
+    "file": "audio/ep014.mp3",
     "title": "第14章：「マーケティングファネル」で考えよう",
-    "available": false
+    "available": true
   },
   {
     "id": 15,
-    "file": "ep015.wav",
+    "file": "audio/ep015.mp3",
     "title": "第15章：「地方移住してカフェを開業」が失敗する理由",
-    "available": false
+    "available": true
   },
   {
     "id": 16,
-    "file": "ep016.wav",
+    "file": "audio/ep016.mp3",
     "title": "第16章：「値決めは経営」",
-    "available": false
+    "available": true
   },
   {
     "id": 17,
-    "file": "ep017.wav",
+    "file": "audio/ep017.mp3",
     "title": "第17章：そもそも「ブランド」とは何か？",
-    "available": false
+    "available": true
   },
   {
     "id": 18,
-    "file": "ep018.wav",
+    "file": "audio/ep018.mp3",
     "title": "第18章：利益率の高い商品を「後ろ」に配置する",
-    "available": false
+    "available": true
   },
   {
     "id": 19,
-    "file": "ep019.wav",
+    "file": "audio/ep019.mp3",
     "title": "第19章：「顧客リスト」こそが商売の根幹",
-    "available": false
+    "available": true
   },
   {
     "id": 20,
-    "file": "ep020.wav",
+    "file": "audio/ep020.mp3",
     "title": "第20章：「ローンチ」とは何か",
-    "available": false
+    "available": true
   },
   {
     "id": 21,
-    "file": "ep021.wav",
+    "file": "audio/ep021.mp3",
     "title": "第21章：ステップ①人々の「不満」「悩み」に着目する",
     "available": false
   },
   {
     "id": 22,
-    "file": "ep022.wav",
+    "file": "audio/ep022.mp3",
     "title": "第22章：最強にして定番の「PASONA」",
     "available": false
   },
   {
     "id": 23,
-    "file": "ep023.wav",
+    "file": "audio/ep023.mp3",
     "title": "第23章：何のためのSNSマーケティングなのか？",
     "available": false
   },
   {
     "id": 24,
-    "file": "ep024.wav",
+    "file": "audio/ep024.mp3",
     "title": "第24章：音声メディアはバズらない",
     "available": false
   },
   {
     "id": 25,
-    "file": "ep025.wav",
+    "file": "audio/ep025.mp3",
     "title": "第25章：ノーカット、少ない演者、ラジオ番組的",
     "available": false
   },
   {
     "id": 26,
-    "file": "ep026.wav",
+    "file": "audio/ep026.mp3",
     "title": "第26章：ショート動画は「浅く広い」メディア",
     "available": false
   },
   {
     "id": 27,
-    "file": "ep027.wav",
+    "file": "audio/ep027.mp3",
     "title": "第27章：SEOアフィで月500万円稼いでいた話",
     "available": false
   },
   {
     "id": 28,
-    "file": "ep028.wav",
+    "file": "audio/ep028.mp3",
     "title": "第28章：かつては超重要だった「広報・PR」",
     "available": false
   },
   {
     "id": 29,
-    "file": "ep029.wav",
+    "file": "audio/ep029.mp3",
     "title": "第29章：「予想通りに不合理」がブームを作った",
     "available": false
   },
   {
     "id": 30,
-    "file": "ep030.wav",
+    "file": "audio/ep030.mp3",
     "title": "第30章：景品表示法：優良誤認、二重価格、ステマ",
     "available": false
   },
   {
     "id": 31,
-    "file": "ep031.wav",
+    "file": "audio/ep031.mp3",
     "title": "第31章：「KPI（Key Performance Indicator : 重要指標）」と「KGI」",
     "available": false
   },
   {
     "id": 34,
-    "file": "ep034.wav",
+    "file": "audio/ep034.mp3",
     "title": "第34章：すべては「推し活」化していく",
     "available": false
   },
   {
     "id": 35,
-    "file": "ep035.wav",
+    "file": "audio/ep035.mp3",
     "title": "第35章：「奇跡」に期待するな",
     "available": false
   },
   {
     "id": 36,
-    "file": "ep036.wav",
+    "file": "audio/ep036.mp3",
     "title": "第36章：後ろのドアを閉じろ",
     "available": false
   },
   {
     "id": 37,
-    "file": "ep037.wav",
+    "file": "audio/ep037.mp3",
     "title": "第37章：稼ぎすぎてもいいことはない",
     "available": false
   },
   {
     "id": 38,
-    "file": "ep038.wav",
+    "file": "audio/ep038.mp3",
     "title": "第38章：人間は労働から疎外される",
     "available": false
   },
   {
     "id": 39,
-    "file": "ep039.wav",
+    "file": "audio/ep039.mp3",
     "title": "第39章：MVPでニーズを検証する",
     "available": false
   },
   {
     "id": 40,
-    "file": "ep040.wav",
+    "file": "audio/ep040.mp3",
     "title": "第40章：「役割迷子」に陥らないように",
     "available": false
   },
   {
     "id": 41,
-    "file": "ep041.wav",
+    "file": "audio/ep041.mp3",
     "title": "第41章：企画案は山ほど考えるべき",
     "available": false
   },
   {
     "id": 42,
-    "file": "ep042.wav",
+    "file": "audio/ep042.mp3",
     "title": "第42章：「成功事例をパクる」のがビジネスの原則",
     "available": false
   },
   {
     "id": 43,
-    "file": "ep043.wav",
+    "file": "audio/ep043.mp3",
     "title": "第43章：概念を与え、市場を生み出した「ゆるキャラ」",
     "available": false
   },
   {
     "id": 45,
-    "file": "ep045.wav",
+    "file": "audio/ep045.mp3",
     "title": "第45章：最初のステップ",
     "available": false
   },
   {
     "id": 46,
-    "file": "ep046.wav",
+    "file": "audio/ep046.mp3",
     "title": "第46章：LINEの問題は配信・運用コスト",
     "available": false
   },
   {
     "id": 47,
-    "file": "ep047.wav",
+    "file": "audio/ep047.mp3",
     "title": "第47章：バックエンドを売るための「7通のメール」",
     "available": false
   },
   {
     "id": 48,
-    "file": "ep048.wav",
+    "file": "audio/ep048.mp3",
     "title": "第48章：基本はSNS、動画マーケで集める",
     "available": false
   },
   {
     "id": 49,
-    "file": "ep049.wav",
+    "file": "audio/ep049.mp3",
     "title": "第49章：ニュースレターや有益コラムを配信し、メディアとして運用する",
     "available": false
   },
   {
     "id": 50,
-    "file": "ep050.wav",
+    "file": "audio/ep050.mp3",
     "title": "第50章：AGIが登場しても、時間は代替できない",
     "available": false
   },
   {
     "id": 51,
-    "file": "ep051.wav",
+    "file": "audio/ep051.mp3",
     "title": "第51章：基本は「購入希望者のリストを積み上げる」こと",
     "available": false
   },
   {
     "id": 52,
-    "file": "ep052.wav",
+    "file": "audio/ep052.mp3",
     "title": "第52章：約1年前からリスト獲得",
     "available": false
   },
   {
     "id": 54,
-    "file": "ep054.wav",
+    "file": "audio/ep054.mp3",
     "title": "第54章：所有するインターネット",
     "available": false
   },
   {
     "id": 55,
-    "file": "ep055.wav",
+    "file": "audio/ep055.mp3",
     "title": "第55章：トークンによって、顧客が「仲間」になる",
     "available": false
   },
   {
     "id": 56,
-    "file": "ep056.wav",
+    "file": "audio/ep056.mp3",
     "title": "第56章：トークンで経済を作る「にんプラ」の事例",
     "available": false
   },
   {
     "id": 57,
-    "file": "ep057.wav",
+    "file": "audio/ep057.mp3",
     "title": "第57章：フォロワーからトークンホルダーへ",
     "available": false
   },
   {
     "id": 59,
-    "file": "ep059.wav",
+    "file": "audio/ep059.mp3",
     "title": "第59章：コミュニティを5つの要素に分解する",
     "available": false
   },
   {
     "id": 60,
-    "file": "ep060.wav",
+    "file": "audio/ep060.mp3",
     "title": "第60章：声を届け続ける",
     "available": false
   },
   {
     "id": 61,
-    "file": "ep061.wav",
+    "file": "audio/ep061.mp3",
     "title": "第61章：そもそも「文化」とは何なのか",
     "available": false
   },
   {
     "id": 63,
-    "file": "ep063.wav",
+    "file": "audio/ep063.mp3",
     "title": "第63章：最短で影響力を高めるには？",
     "available": false
   },
   {
     "id": 64,
-    "file": "ep064.wav",
+    "file": "audio/ep064.mp3",
     "title": "第64章：低単価教材を売る",
     "available": false
   },
   {
     "id": 65,
-    "file": "ep065.wav",
+    "file": "audio/ep065.mp3",
     "title": "第65章：そのお金をどう使うのか？",
     "available": false
   }
