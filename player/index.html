@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>明鏡ポッドキャスト</title>
+  <title>明鏡ずんだキャスト</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -169,7 +169,7 @@
 
 <!-- ログイン画面 -->
 <div id="auth-screen">
-  <h1>明鏡ポッドキャスト</h1>
+  <h1>明鏡ずんだキャスト</h1>
   <p>明鏡の購入者限定コンテンツです。<br>Discordアカウントでログインしてください。</p>
   <a class="discord-btn" id="login-btn" href="#">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +185,7 @@
 <div id="app-screen">
   <header>
     <div class="header-top">
-      <h1>明鏡ポッドキャスト</h1>
+      <h1>明鏡ずんだキャスト</h1>
       <div id="user-info">
         <img id="user-avatar" src="" alt="">
         <span id="user-name"></span>
@@ -455,7 +455,7 @@ function setupMediaSession() {
 function updateMediaSession(ep) {
   if (!('mediaSession' in navigator)) return;
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: ep.title, artist: 'イケハヤ / 明鏡', album: '明鏡ポッドキャスト',
+    title: ep.title, artist: 'イケハヤ / 明鏡', album: '明鏡ずんだキャスト',
   });
 }
 
