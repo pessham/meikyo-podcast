@@ -189,7 +189,7 @@
     Discordでログイン
   </a>
   <div id="auth-loading">認証中…</div>
-  <div id="auth-error">このDiscordアカウントは明鏡サーバーのメンバーではありません。</div>
+  <div id="auth-error">「明鏡」購入者ロールが確認できませんでした。<br>購入後にDiscordサーバーでロールを受け取ってからお試しください。</div>
 </div>
 
 <!-- プレイヤー画面 -->
@@ -246,6 +246,7 @@
 // ── 設定 ──────────────────────────────────────────────
 const DISCORD_CLIENT_ID  = '1493741720981078027';
 const REQUIRED_GUILD_ID  = '1352073351882870814';
+const REQUIRED_ROLE_ID   = '1489786702032670730';
 const REDIRECT_URI       = 'https://pessham.github.io/meikyo-podcast/';
 const MANIFEST_URL       = './manifest.json';
 // ─────────────────────────────────────────────────────
@@ -266,7 +267,7 @@ function buildOAuthURL() {
     client_id: DISCORD_CLIENT_ID,
     redirect_uri: REDIRECT_URI,
     response_type: 'token',
-    scope: 'identify guilds',
+    scope: 'identify guilds guilds.members.read',
   });
   return `https://discord.com/oauth2/authorize?${params}`;
 }
@@ -306,14 +307,21 @@ async function verifyAndShow(token) {
     if (!userRes.ok) throw new Error('token_expired');
     const user = await userRes.json();
 
-    // ギルドメンバーシップ確認
-    const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const guilds = await guildsRes.json();
-    const isMember = guilds.some(g => g.id === REQUIRED_GUILD_ID);
+    // ギルドメンバー情報を取得してロール確認
+    const memberRes = await fetch(
+      `https://discord.com/api/users/@me/guilds/${REQUIRED_GUILD_ID}/member`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!memberRes.ok) {
+      // サーバー未参加の場合もここに来る
+      sessionStorage.removeItem('discord_token');
+      showError();
+      return;
+    }
+    const member = await memberRes.json();
+    const hasRole = Array.isArray(member.roles) && member.roles.includes(REQUIRED_ROLE_ID);
 
-    if (!isMember) {
+    if (!hasRole) {
       sessionStorage.removeItem('discord_token');
       showError();
       return;
